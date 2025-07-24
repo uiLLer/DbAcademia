@@ -1,61 +1,85 @@
 from db.conn import Conn
 
 class FichaTreino:
-    def __init__(self):
-        self.conn = Conn().conectar()
-
-    def inserir(self, aluno_id, instrutor_id, data_criacao):
+    @classmethod
+    def inserir(cls, aluno_id, instrutor_id, data_criacao):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("""
                 INSERT INTO academia.ficha_treino (aluno_id, instrutor_id, data_criacao)
                 VALUES (%s, %s, %s)
             """, (aluno_id, instrutor_id, data_criacao))
-            self.conn.commit()
+            conn.commit()
             print("[INFO] Ficha de treino inserida com sucesso!")
         except Exception as e:
             print(f"[ERRO] Falha ao inserir ficha de treino: {e}")
+        finally:
+            cur.close()
+            conn.close()
 
-    def atualizar(self, id, aluno_id, instrutor_id, data_criacao):
+    @classmethod
+    def atualizar(cls, id, aluno_id, instrutor_id, data_criacao):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("""
                 UPDATE academia.ficha_treino
                 SET aluno_id = %s, instrutor_id = %s, data_criacao = %s
                 WHERE id = %s
             """, (aluno_id, instrutor_id, data_criacao, id))
-            self.conn.commit()
+            conn.commit()
             print("[INFO] Ficha de treino atualizada com sucesso!")
         except Exception as e:
             print(f"[ERRO] Falha ao atualizar ficha de treino: {e}")
+        finally:
+            cur.close()
+            conn.close()
 
-    def deletar(self, id):
+    @classmethod
+    def deletar(cls, id):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("DELETE FROM academia.ficha_treino WHERE id = %s", (id,))
-            self.conn.commit()
+            conn.commit()
             print("[INFO] Ficha de treino deletada com sucesso!")
         except Exception as e:
             print(f"[ERRO] Falha ao deletar ficha de treino: {e}")
+        finally:
+            cur.close()
+            conn.close()
 
-    def consultar(self):
+    @classmethod
+    def consultar(cls):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("SELECT * FROM academia.ficha_treino")
-            return cur.fetchall()
+            resultados = cur.fetchall()
+            return resultados
         except Exception as e:
             print(f"[ERRO] Falha ao consultar fichas de treino: {e}")
             return []
+        finally:
+            cur.close()
+            conn.close()
 
-    def listar_todos(self):
+    @classmethod
+    def listar_todos(cls):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("""
                 SELECT id, aluno_id, instrutor_id, data_criacao 
                 FROM academia.ficha_treino 
                 ORDER BY data_criacao DESC
             """)
-            return cur.fetchall()
+            resultados = cur.fetchall()
+            return resultados
         except Exception as e:
             print(f"[ERRO] Falha ao listar fichas de treino: {e}")
             return []
+        finally:
+            cur.close()
+            conn.close()

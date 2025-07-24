@@ -1,57 +1,81 @@
 from db.conn import Conn
 
 class Equipamento:
-    def __init__(self):
-        self.conn = Conn().conectar()
-
-    def inserir(self, nome, descricao):
+    @classmethod
+    def inserir(cls, nome, descricao):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("""
                 INSERT INTO academia.equipamento (nome, descricao)
                 VALUES (%s, %s)
             """, (nome, descricao))
-            self.conn.commit()
+            conn.commit()
             print("[INFO] Equipamento inserido com sucesso!")
         except Exception as e:
             print(f"[ERRO] Falha ao inserir equipamento: {e}")
+        finally:
+            cur.close()
+            conn.close()
 
-    def atualizar(self, id, nome, descricao):
+    @classmethod
+    def atualizar(cls, id, nome, descricao):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("""
                 UPDATE academia.equipamento
                 SET nome = %s, descricao = %s
                 WHERE id = %s
             """, (nome, descricao, id))
-            self.conn.commit()
+            conn.commit()
             print("[INFO] Equipamento atualizado com sucesso!")
         except Exception as e:
             print(f"[ERRO] Falha ao atualizar equipamento: {e}")
+        finally:
+            cur.close()
+            conn.close()
 
-    def deletar(self, id):
+    @classmethod
+    def deletar(cls, id):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("DELETE FROM academia.equipamento WHERE id = %s", (id,))
-            self.conn.commit()
+            conn.commit()
             print("[INFO] Equipamento deletado com sucesso!")
         except Exception as e:
             print(f"[ERRO] Falha ao deletar equipamento: {e}")
+        finally:
+            cur.close()
+            conn.close()
 
-    def consultar(self):
+    @classmethod
+    def consultar(cls):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("SELECT * FROM academia.equipamento")
-            return cur.fetchall()
+            resultados = cur.fetchall()
+            return resultados
         except Exception as e:
             print(f"[ERRO] Falha ao consultar equipamentos: {e}")
             return []
+        finally:
+            cur.close()
+            conn.close()
 
-    def listar_todos(self):
+    @classmethod
+    def listar_todos(cls):
         try:
-            cur = self.conn.cursor()
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("SELECT id, nome FROM academia.equipamento ORDER BY nome")
-            return cur.fetchall()
+            resultados = cur.fetchall()
+            return resultados
         except Exception as e:
             print(f"[ERRO] Falha ao listar equipamentos: {e}")
             return []
+        finally:
+            cur.close()
+            conn.close()

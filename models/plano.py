@@ -1,74 +1,67 @@
 from db.conn import Conn
 
 class Plano:
-    def __init__(self, nome, duracao_meses, valor, id=None):
+    def __init__(self, nome=None, duracao_meses=None, valor=None, id=None):
         self.id = id
         self.nome = nome
         self.duracao_meses = duracao_meses
         self.valor = valor
 
-    def inserir(self):
-        db = Conn()
-        conn = db.conectar()
-        cur = conn.cursor()
+    @classmethod
+    def inserir(cls, nome, duracao_meses, valor):
         try:
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("""
                 INSERT INTO academia.plano (nome, duracao_meses, valor)
                 VALUES (%s, %s, %s) RETURNING id
-            """, (self.nome, self.duracao_meses, self.valor))
-            self.id = cur.fetchone()[0]
+            """, (nome, duracao_meses, valor))
+            id_inserido = cur.fetchone()[0]
             conn.commit()
+            return id_inserido
         except Exception as e:
             print(f"[ERRO] Falha ao inserir plano: {e}")
-            conn.rollback()
+            return None
         finally:
             cur.close()
-            db.desconectar()
-        return self.id
+            conn.close()
 
-    def atualizar(self):
-        if not self.id:
-            return
-        db = Conn()
-        conn = db.conectar()
-        cur = conn.cursor()
+    @classmethod
+    def atualizar(cls, id, nome, duracao_meses, valor):
         try:
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("""
                 UPDATE academia.plano
                 SET nome = %s, duracao_meses = %s, valor = %s
                 WHERE id = %s
-            """, (self.nome, self.duracao_meses, self.valor, self.id))
+            """, (nome, duracao_meses, valor, id))
             conn.commit()
         except Exception as e:
             print(f"[ERRO] Falha ao atualizar plano: {e}")
-            conn.rollback()
         finally:
             cur.close()
-            db.desconectar()
+            conn.close()
 
-    def deletar(self):
-        if not self.id:
-            return
-        db = Conn()
-        conn = db.conectar()
-        cur = conn.cursor()
+    @classmethod
+    def deletar(cls, id):
         try:
-            cur.execute("DELETE FROM academia.plano WHERE id = %s", (self.id,))
+            conn = Conn().conectar()
+            cur = conn.cursor()
+            cur.execute("DELETE FROM academia.plano WHERE id = %s", (id,))
             conn.commit()
         except Exception as e:
             print(f"[ERRO] Falha ao deletar plano: {e}")
-            conn.rollback()
         finally:
             cur.close()
-            db.desconectar()
+            conn.close()
 
-    @staticmethod
-    def consultar(id):
-        db = Conn()
-        conn = db.conectar()
-        cur = conn.cursor()
+    @classmethod
+    def consultar(cls, id):
         plano = None
         try:
+            conn = Conn().conectar()
+            cur = conn.cursor()
             cur.execute("SELECT id, nome, duracao_meses, valor FROM academia.plano WHERE id = %s", (id,))
             row = cur.fetchone()
             if row:
@@ -77,22 +70,22 @@ class Plano:
             print(f"[ERRO] Falha ao consultar plano: {e}")
         finally:
             cur.close()
-            db.desconectar()
+            conn.close()
         return plano
 
-    @staticmethod
-    def listar_todos():
-        db = Conn()
-        conn = db.conectar()
-        cur = conn.cursor()
+    @classmethod
+    def listar_todos(cls):
         planos = []
         try:
-            cur.execute("SELECT id, nome, duracao_meses, valor FROM academia.plano")
-            for row in cur.fetchall():
+            conn = Conn().conectar()
+            cur = conn.cursor()
+            cur.execute("SELECT id, nome, duracao_meses, valor FROM academia.plano ORDER BY nome")
+            rows = cur.fetchall()
+            for row in rows:
                 planos.append(Plano(*row[1:], id=row[0]))
         except Exception as e:
             print(f"[ERRO] Falha ao listar planos: {e}")
         finally:
             cur.close()
-            db.desconectar()
+            conn.close()
         return planos
