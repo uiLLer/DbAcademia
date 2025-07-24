@@ -1,5 +1,4 @@
-# models/aluno.py
-from conn import Conn  # Supondo que Conn está em conn.py
+from db.conn import Conn
 
 class Aluno:
     def __init__(self, nome_completo, cpf, data_nascimento, telefone=None, email=None, id=None):
