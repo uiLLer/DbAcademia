@@ -110,3 +110,4 @@ class Aluno:
             cur.close()
             db.desconectar()
         return alunos
+    
