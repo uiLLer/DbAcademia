@@ -7,7 +7,7 @@ class MatriculaView(tk.Toplevel):
         super().__init__(master)
         self.controller = controller
         self.title("Gerenciar Matrículas")
-        self.geometry("800x400")
+        self.geometry("1200x600")
 
         self.tree = ttk.Treeview(self, columns=("ID", "Aluno ID", "Plano ID", "Data Início", "Data Fim"), show="headings")
         for col in self.tree["columns"]:

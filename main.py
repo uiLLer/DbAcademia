@@ -4,7 +4,7 @@ from views.main_view import MainView
 def main():
     root = Tk()
     root.title("Academia Força Total")
-    root.geometry("800x600")
+    root.geometry("1200x600")
     app = MainView(root)
     root.mainloop()
 

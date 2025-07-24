@@ -6,7 +6,7 @@ class FichaTreinoExercicioView(tk.Toplevel):
         super().__init__(master)
         self.controller = controller
         self.title("Gerenciar Detalhes da Ficha de Treino")
-        self.geometry("800x400")
+        self.geometry("1200x600")
 
         self.tree = ttk.Treeview(self, columns=("Ficha Treino ID", "Exercício ID", "Séries", "Repetições", "Ordem"), show="headings")
         for col in self.tree["columns"]:

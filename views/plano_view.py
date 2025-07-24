@@ -6,7 +6,7 @@ class PlanoView(tk.Toplevel):
         super().__init__(master)
         self.controller = controller
         self.title("Gerenciar Planos")
-        self.geometry("600x350")
+        self.geometry("1200x600")
 
         self.tree = ttk.Treeview(self, columns=("ID", "Nome", "Duração (meses)", "Valor"), show="headings")
         for col in self.tree["columns"]:

@@ -6,7 +6,7 @@ class AlunoView(tk.Toplevel):
         super().__init__(master)
         self.controller = controller
         self.title("Gerenciar Alunos")
-        self.geometry("700x400")
+        self.geometry("1200x600")
 
         self.tree = ttk.Treeview(self, columns=("ID", "Nome", "CPF", "Nascimento", "Telefone", "Email"), show="headings")
         for col in self.tree["columns"]:

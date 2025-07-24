@@ -6,7 +6,7 @@ class EquipamentoView(tk.Toplevel):
         super().__init__(master)
         self.controller = controller
         self.title("Equipamentos")
-        self.geometry("600x400")
+        self.geometry("1200x600")
 
         self.tree = ttk.Treeview(self, columns=("ID", "Nome", "Descrição"), show="headings")
         self.tree.heading("ID", text="ID")

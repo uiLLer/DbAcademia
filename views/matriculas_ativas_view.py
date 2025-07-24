@@ -6,7 +6,7 @@ class AlunoMatriculaAtivaView(tk.Toplevel):
         super().__init__(master)
         self.controller = controller
         self.title("Alunos com Matrículas Ativas")
-        self.geometry("900x400")
+        self.geometry("1200x600")
 
         colunas = ("ID", "Nome", "CPF", "Início Matrícula", "Fim Matrícula", "Plano", "Instrutor")
 
